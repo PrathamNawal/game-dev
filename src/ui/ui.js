@@ -71,7 +71,7 @@ export class UI {
           <div class="hud-center"><div class="hud-label">${esc(label)}</div><div class="hud-time" id="hud-time" aria-live="off">0.0</div></div>
           ${coinPill(coins, 'hud-coins')}
         </div>
-        <div class="pips" id="pips" aria-label="Coins collected">${[0, 1, 2].map(i => `<i data-i="${i}"></i>`).join('')}</div>
+        <div class="pips" id="pips" role="img" aria-label="0 of 3 coins collected">${[0, 1, 2].map(i => `<i data-i="${i}"></i>`).join('')}</div>
         <div class="hud-bottom">
           <button class="btn small" id="hint-btn" data-act="hint" data-ui aria-label="Show hint">${ICON.hint}<span>Hint</span><em>${ICON.coin}${esc(hintCost)}</em></button>
           ${showRecal ? `<button class="iconbtn" data-act="recal" data-ui aria-label="Recalibrate tilt: treat current pose as flat">${ICON.recal}</button>` : ''}
@@ -88,7 +88,10 @@ export class UI {
     if (!this.hud) return;
     const t = fmt(time);
     if (t !== this._lastTime) { this.hud.time.textContent = t; this._lastTime = t; }
-    if (pips !== this._lastPips) { this.hud.pips.forEach((p, i) => p.classList.toggle('on', i < pips)); this._lastPips = pips; }
+    if (pips !== this._lastPips) {
+      this.hud.pips.forEach((p, i) => p.classList.toggle('on', i < pips)); this._lastPips = pips;
+      this.hud.pips[0]?.parentElement.setAttribute('aria-label', `${pips} of 3 coins collected`);
+    }
     if (coins != null && this.hud.coins && this.hud.coins.textContent !== String(coins)) this.hud.coins.textContent = coins;
   }
   setHintPulse(on) { this.hud?.hint?.classList.toggle('pulse', !!on); }
@@ -113,7 +116,7 @@ export class UI {
             <button class="btn ghost" data-act="restart">${ICON.restart}<span>Restart</span></button>
             <button class="btn ghost" data-act="settings">${ICON.sliders}<span>Settings</span></button>
             ${showRecal ? `<button class="btn ghost" data-act="recal">${ICON.recal}<span>Recalibrate</span></button>` : ''}
-            ${canSkip ? `<button class="btn ghost" data-act="skip">${ICON.skip}<span>Skip · ${ICON.coin}${esc(skipCost)}</span></button>` : ''}
+            ${canSkip ? `<button class="btn ghost" data-act="skip">${ICON.skip}<span>Skip ${ICON.coin}${esc(skipCost)}</span></button>` : ''}
           </div>
           <button class="btn ghost" data-act="menu">${ICON.home}<span>Main menu</span></button>
         </div>
@@ -128,7 +131,7 @@ export class UI {
       <div class="modal win" data-ui role="dialog" aria-modal="true" aria-labelledby="wz">
         <div class="card">
           <h2 id="wz">${esc(r.title)}</h2>
-          <div class="stars" aria-label="${esc(r.stars)} of 3 stars">${starRow(r.stars)}</div>
+          <div class="stars" role="img" aria-label="${esc(r.stars)} of 3 stars">${starRow(r.stars)}</div>
           <dl class="facts">
             <div><dt>Time</dt><dd>${fmt(r.time)}s${r.newBest ? ' <span class="tag">Best!</span>' : ''}</dd></div>
             ${r.falls ? `<div><dt>Falls</dt><dd>${esc(r.falls)} <span class="muted">(+${r.falls * 2}s)</span></dd></div>` : ''}

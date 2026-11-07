@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| **Status** | Approved for build (v1.0 scope) |
+| **Status** | v1.0 scope **built** (0.1.0); awaiting real-device validation — see [ROADMAP](ROADMAP.md) |
 | **Owner** | Pratham Nawal |
 | **Last updated** | 2026-11-07 |
 | **Related** | [GAME_DESIGN](GAME_DESIGN.md) · [TECH_DESIGN](TECH_DESIGN.md) · [ROADMAP](ROADMAP.md) · [DECISIONS](DECISIONS.md) |

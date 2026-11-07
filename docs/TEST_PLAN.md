@@ -14,7 +14,9 @@ Last run: 2026-11-07 · build 0.1.0
 | Suite | Result |
 |---|---|
 | Unit | **31 / 31 pass** (≈ 1.3 s) |
-| E2E | **23 / 23 pass** (≈ 2.5 min on CPU rasterizer) |
+| E2E | **24 / 24 pass** (≈ 3 min on CPU rasterizer) |
+| Accessibility | **axe-core WCAG 2 A/AA + best-practice: 0 violations** on menu, settings, levels, HUD, win (in e2e) |
+| Hosting | verified from a **sub-path** (`/games/tilt/`): SW scope, icons, offline reload, zero 4xx/console errors |
 | Autopilot solvability | levels 1–120 + 30 daily seeds: 100 % solved; ≤ 15 falls in total across 120 levels |
 | Structural validity | 300 seeds (250 journey + 50 daily): reachable goal, solution avoids holes, coins unique/valid, deterministic |
 
@@ -33,6 +35,9 @@ ads-off mode (no ad UI; graceful 0-coin messaging) · GPU resource leak over 60 
 | screenshot review | Layer class `coach` collided with inner `.coach` bubble style → dimmed screen | layers namespaced `L-*` |
 | screenshot review | Win card content overflowed (content-sized grid track) | `minmax(0,1fr)` tracks |
 | 320 px audit | Replay/Share/Menu buttons overflowed on very small phones | compact row buttons |
+| axe-core | selected-segment contrast 4.0:1 (<4.5); `aria-label` on role-less divs; no `<main>` landmark; viewport blocked zoom | darker accent, `role=img`, `<main>`, zoom allowed (canvas keeps `touch-action:none`) |
+| screenshot review | pause-menu "Skip · 40" wrapped mid-label | `nowrap`, odd last button spans row |
+| design review | respawn re-zeroed the tilt pose (neutral could drift) | recalibrate only on level start / resume / orientation change / button |
 | build | esbuild can't down-level destructuring for `safari14` | target `safari15` |
 
 ## 3. Performance (measured)
@@ -43,9 +48,20 @@ ads-off mode (no ad UI; graceful 0-coin messaging) · GPU resource leak over 60 
 | Physics cost | — | **1.8 µs/step** → 0.21 ms CPU per second of play |
 | Level generation | — | **0.41 ms** avg |
 | GPU memory over 60 level loads | no growth | bounded (leak test) |
+| Main-thread JS per frame (sim + scene sync) | — | **0.044 ms** |
 | FPS | ≥ 55 on mid phone | 61 fps on a **CPU** rasterizer at Low/DPR 1; **not yet measured on real phones** |
 
 Adaptive quality: if average frame time > 30 ms after warm-up, the game switches to Low once and tells the player.
+
+### Difficulty calibration (simulated; `npm run sim`)
+| Controller | Solved | Falls/level | Time ÷ par | Notes |
+|---|---|---|---|---|
+| Expert (60 ms delay, tremor .1) | 120/120 | 0.00 | 0.85–0.90 | |
+| Average (150 ms, .3) | 119/120 | 0.00 | 1.05–1.24 | |
+| Casual (250 ms, .5, slow) | 108/120 | 0.00–0.13 | 1.5–2.1 | a few stalls (corner oscillation in the bot) |
+| First-time **explorer** (no map) | — | ≈ 2.6 on hole levels | route ≈ 1.5× shortest | → star thresholds par×1.8 / ×3.0 |
+
+Caveat: bots follow the safe route, so they under-represent hole danger; real players stray. Treat as a floor, tune from real play.
 
 ## 4. Manual device matrix — **NOT YET RUN** (requires hardware)
 Track results here; mark ✅/❌ with date + tester.

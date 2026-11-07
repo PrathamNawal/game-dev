@@ -36,7 +36,8 @@ Open it on a phone (same network, or any HTTPS static host — **device-motion r
 |---|---|
 | `npm test` | 31 unit tests (generation, physics, autopilot solvability, save, economy, ads, perf) |
 | `npm run build` | Production bundle → `dist/` (+ service worker, hashed assets) |
-| `npm run e2e` | 23 browser tests against the production build (needs `playwright` + Chromium). `-- --shots` regenerates `docs/screenshots` |
+| `npm run sim` | Difficulty calibration sims (human-like controllers, first-time explorer) — re-run after tuning |
+| `npm run e2e` | 24 browser tests against the production build (needs `playwright` + Chromium). `-- --shots` regenerates `docs/screenshots` |
 | `npm run icons` | Re-render PNG icons from `public/icons/icon.svg` |
 | `npm run check` | test + build |
 | `TILT_ADS=off npm run build` | Build with **no ads at all** (recommended until a real ad provider is integrated) |

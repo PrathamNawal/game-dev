@@ -7,12 +7,12 @@ export const parTime = pathLen => Math.max(6, pathLen * PAR_SEC_PER_CELL);
 /** effective seconds = time + penalty per fall */
 export const effectiveTime = (time, falls) => time + falls * FALL_PENALTY_SEC;
 
-/** 3 stars: <= par*1.6 ; 2 stars: <= par*2.6 ; else 1 */
+/** 3 stars: <= par*1.8 ; 2 stars: <= par*3.0 ; else 1  (calibrated vs. a first-time explorer, see docs/GAME_DESIGN.md) */
 export function starsFor(time, falls, pathLen) {
   const par = parTime(pathLen);
   const t = effectiveTime(time, falls);
-  if (t <= par * 1.6) return 3;
-  if (t <= par * 2.6) return 2;
+  if (t <= par * 1.8) return 3;
+  if (t <= par * 3.0) return 2;
   return 1;
 }
 

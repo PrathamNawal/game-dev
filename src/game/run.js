@@ -61,7 +61,6 @@ export class Run {
       const s = this.level.start;
       this.renderer.resetMarble(s.x + 0.5, s.y + 0.5);
       this.state = 'playing';
-      this.input.recalibrate?.();
     }
     if (this.state === 'won' && this.renderer.animDone && !this._wonFired) {
       this._wonFired = true;

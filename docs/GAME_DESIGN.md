@@ -48,7 +48,9 @@ Start = bottom-left-ish corner cell; goal = farthest cell from start by BFS (gua
 
 ## Stars & par
 `par = shortestPathLength · 0.55 s` (path length in cells). `effective = time + 2·falls`.
-3★ ≤ par · 1.6, 2★ ≤ par · 2.6, else 1★. (Autopilot clears at ≈0.45 s/cell ≈ 0.8× par; humans expected ≈1.0–1.5×. Re-tune after playtests.)
+3★ ≤ par · 1.8, 2★ ≤ par · 3.0, else 1★.
+
+**Calibration (simulated, 2026-11-07).** Route-knowing autopilot ≈ 0.8× par. A first-time *explorer* (DFS, no map) travels ≈ 1.5× the shortest path (p25 1.3 / p75 1.8) and takes ≈ 2.6 hole falls on hole-heavy levels (+2 s each) → a *perfectly controlled* first run lands ≈ 1.4–1.8× par; humans add control error. Thresholds therefore make 3★ reachable on a good first run, 2★ typical, 1★ slow. **Re-tune from real play data.**
 
 ## Economy
 | Item | Value |
@@ -76,7 +78,7 @@ A daily-playing free player earns roughly 20–30 coins/day → ≈ 1–2 hints/
 Reduced-motion: no shake, no confetti, instant transitions.
 
 ## As-built tuning notes
-* Autopilot (vmax 3.2 u/s) clears levels at ≈0.45 s/cell; par = 0.55 s/cell. Star thresholds are par×1.6 / ×2.6 — **to be re-tuned from real human play**.
+* Autopilot (vmax 3.2 u/s) clears levels at ≈0.45 s/cell; par = 0.55 s/cell. Star thresholds are par×1.8 / ×3.0 — **to be re-tuned from real human play**.
 * Replays pay coin pickups but not the clear reward (anti-farming). Daily pays once per day.
 * Hint trail shows the BFS-safe path from the marble's *current* cell for 4 s.
 * Attract mode (menu background) uses the same autopilot at a calm 2.4 u/s.

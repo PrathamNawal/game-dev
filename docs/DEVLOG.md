@@ -1,6 +1,13 @@
 # Dev Log
 Newest first. One entry per working session / milestone: what changed, what was learned, what's next.
 
+## 2026-11-07 — M5: hardening without hardware
+- **Human-factors simulation** (`npm run sim`): degraded controllers (reaction delay + tremor) and a first-time explorer bot. Finding: a first run costs ≈1.5× the shortest route plus ≈2.6 falls on hole levels → original 3★ threshold (par×1.6) was effectively replay-only. Loosened to par×1.8 / ×3.0.
+- **axe-core** audit found 4 real a11y issues (contrast 4.0:1, role-less aria-labels, no landmark, zoom blocked). Fixed and added axe to the e2e suite (5 screens, 0 violations).
+- Verified sub-path hosting + offline + icons; measured main-thread cost (0.044 ms/frame).
+- Input robustness: no tilt re-zero on respawn (neutral can't drift), recalibrate on rotation, persist on `pagehide`.
+- Final automated state: **31 unit + 24 e2e green**, 145 KB gz. Remaining risk is entirely *real-device feel* — see TEST_PLAN §4.
+
 ## 2026-11-07 — M3 + M4: full game, platform & quality
 - Built the complete loop: menu with live attract-mode board, HUD, pause, level select, win screen (animated stars, share), settings, daily challenge + streak, hints, skips, coin economy, versioned save with backup/migration, ad policy with provider adapter, WebAudio synth (no assets), haptics, wake-lock, PWA (manifest, icons, offline SW), adaptive quality, reduced-motion.
 - Wrote a Playwright e2e suite (23 tests) against the **production** build. It earned its keep — found 4 real bugs that unit tests could never see:

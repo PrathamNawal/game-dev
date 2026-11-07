@@ -9,6 +9,8 @@ const SHOT_DIR = path.resolve(__dirname, '../../docs/screenshots');
 const PORT = 4173, BASE = `http://localhost:${PORT}/`;
 const ARGS = ['--use-angle=swiftshader', '--enable-unsafe-swiftshader', '--ignore-gpu-blocklist'];
 
+const fs = require('fs');
+const AXE = fs.readFileSync(require.resolve('axe-core/axe.min.js'), 'utf8');
 const results = [];
 async function test(name, fn) {
   const t0 = Date.now();
@@ -22,6 +24,8 @@ let browser;
 async function open({ mobile = true, query = '?debug&q=low', seed = null, init = null, ctxOpts = {} } = {}) {
   const base = mobile ? { ...devices['iPhone 13'], deviceScaleFactor: 1 } : { viewport: { width: 1280, height: 800 } };
   const ctx = await browser.newContext({ ...base, ...ctxOpts });
+  // Chromium exposes requestPermission() and answers 'prompt' without a real gesture; stub 'granted' so default runs are quiet.
+  await ctx.addInitScript(() => { if (typeof DeviceOrientationEvent !== 'undefined') DeviceOrientationEvent.requestPermission = async () => 'granted'; });
   if (init) await ctx.addInitScript(init);
   if (seed) await ctx.addInitScript(s => { if (!localStorage.getItem('tilt.__seeded')) { localStorage.setItem('tilt.save', JSON.stringify(s)); localStorage.setItem('tilt.__seeded', '1'); } }, seed);
   const page = await ctx.newPage();
@@ -134,6 +138,21 @@ const base = (over = {}) => ({ version: 1, coins: 30, level: 1, stars: {}, best:
     const { ctx, page } = await open({ query: '?debug&auto&q=low&ads=off', seed: base({ flags: { tutorialSeen: true } }) });
     await page.click('[data-act=play]'); await page.waitForSelector('.modal.win', { timeout: 60000 });
     eq(await page.locator('#double-btn').count(), 0); await ctx.close();
+  });
+
+  await test('accessibility: axe-core (WCAG 2 A/AA + best practice) finds no violations on any screen', async () => {
+    const { ctx, page } = await open({ ctxOpts: { bypassCSP: true }, query: '?debug&auto&q=low', seed: base({ coins: 50, level: 3, stars: { 1: 3, 2: 2 }, flags: { tutorialSeen: true } }) });
+    const audit = async name => {
+      await page.addScriptTag({ content: AXE }); await page.waitForTimeout(450);
+      const v = await page.evaluate(async () => (await axe.run(document, { runOnly: ['wcag2a', 'wcag2aa', 'best-practice'] })).violations.map(x => x.id + ' x' + x.nodes.length + ' (' + x.nodes[0].html.slice(0, 70) + ')'));
+      assert(v.length === 0, `${name}: ${v.join(' ; ')}`);
+    };
+    await audit('menu');
+    await page.click('[data-act=settings]'); await page.waitForSelector('.L-settings'); await audit('settings'); await page.click('[data-act=closeSettings]');
+    await page.click('[data-act=levels]'); await page.waitForSelector('.L-levels'); await audit('levels'); await page.click('[data-act=closeLevels]');
+    await page.click('[data-act=play]'); await page.waitForSelector('.hud'); await audit('hud');
+    await page.waitForSelector('.modal.win', { timeout: 60000 }); await audit('win');
+    await ctx.close();
   });
 
   await test('daily: clear -> streak 1, rewards, menu shows done; second claim pays nothing', async () => {

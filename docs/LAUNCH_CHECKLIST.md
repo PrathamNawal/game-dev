@@ -35,7 +35,8 @@ Based on the indie-game-pm pre-launch checklist, adapted for a web/PWA release.
 - ✅ Bundle 145 KB gz (< 400 KB), 24 draw calls, no GPU leak
 - ✅ Adaptive Low quality for slow devices
 - ✅ Safe-area insets, portrait + landscape + desktop layouts, 320 px audit
-- ✅ Reduced-motion respected; focus management in dialogs; ≥44 px targets
+- ✅ Reduced-motion respected; focus management in dialogs; ≥44 px targets; axe-core clean on all screens
+- ✅ Works from a sub-path or domain root (relative URLs; verified)
 - ✅ CSP locked to same-origin (will need amending for a real ad SDK)
 - ⬜ 🔗 Real-device matrix (docs/TEST_PLAN.md §4) — iOS Safari + Android Chrome minimum
 - ⬜ Crash/error telemetry sink (Roadmap *Next*; today errors are only in the console)

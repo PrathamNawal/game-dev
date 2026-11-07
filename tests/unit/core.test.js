@@ -183,9 +183,9 @@ test('hint path: computePath from any open cell reaches the goal avoiding holes'
 test('scoring: stars, par and rewards', () => {
   const par = parTime(20);
   assert.equal(starsFor(par, 0, 20), 3);
-  assert.equal(starsFor(par * 1.6 + 0.1, 0, 20), 2);
-  assert.equal(starsFor(par * 3, 0, 20), 1);
-  assert.equal(starsFor(par * 1.5, 1, 20), 2);
+  assert.equal(starsFor(par * 1.8 + 0.1, 0, 20), 2);
+  assert.equal(starsFor(par * 3.2, 0, 20), 1);
+  assert.equal(starsFor(par * 1.7, 1, 20), 2);
   assert.equal(clearReward({ stars: 3, kind: 'journey' }), 5);
   assert.equal(clearReward({ stars: 1, kind: 'daily', streak: 3 }), 13);
   assert.equal(clearReward({ stars: 1, kind: 'daily', streak: 99 }), 20);

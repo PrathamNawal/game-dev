@@ -53,7 +53,8 @@ export class App {
     this.input.onUserInput = () => { this.audio.unlock(); this._firstMotion(); };
 
     addEventListener('resize', () => this.renderer.resize());
-    addEventListener('orientationchange', () => setTimeout(() => this.renderer.resize(), 250));
+    addEventListener('orientationchange', () => setTimeout(() => { this.renderer.resize(); this.input.recalibrate(); }, 300));
+    addEventListener('pagehide', () => { try { this._persist(); } catch { /* ignore */ } });
     document.addEventListener('visibilitychange', () => {
       if (document.hidden) { if (this.mode === 'playing') this.pause(); this.audio.setRolling?.(0); }
       else if (this.mode === 'playing' || this.mode === 'paused') this._acquireWake();

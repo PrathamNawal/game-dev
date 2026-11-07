@@ -19,6 +19,7 @@ Everything in PRD §6 P0/P1.
 0. **Real-device validation** (iOS Safari + Android Chrome) — tune tilt feel/par from real play. *Blocks soft launch.*
 1. **Real rewarded-ad provider** (portal/H5 SDK) + consent banner. *External dependency: publisher account.*
 2. Share card (screenshot of stars/time + deep link to the Daily seed).
+2b. Android **Back** button → pause/menu (History API) instead of leaving the app.
 3. Ad-removal purchase ($1.99–$2.99) via Payment Request / store wrapper.
 4. Themes/skins (cosmetic, purely visual) — seasonal themes live here, never as a standalone app (Rule 3).
 5. Privacy-reviewed analytics sink.
