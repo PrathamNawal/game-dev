@@ -59,5 +59,7 @@ docs/      PRD, game design, tech design, ADRs, roadmap, test plan, launch check
 [Launch checklist](docs/LAUNCH_CHECKLIST.md) · [Dev log](docs/DEVLOG.md) · [Changelog](CHANGELOG.md)
 
 ## Deploying
-`dist/` is a static site with only relative URLs, so it works at a domain root or a sub-path. Any static host
+**GitHub Pages (automated):** `.github/workflows/pages.yml` tests, builds with `TILT_ADS=off` and deploys `dist/` on every push to `main`/`master`. One-time setup: repo **Settings → Pages → Source: GitHub Actions**. Live URL: `https://<owner>.github.io/<repo>/`.
+
+**Anywhere else:** `dist/` is a static site with only relative URLs, so it works at a domain root or a sub-path. Any static host
 over HTTPS works (GitHub Pages, Netlify, Cloudflare Pages, S3+CDN). Serve `sw.js` with `Cache-Control: no-cache`.
