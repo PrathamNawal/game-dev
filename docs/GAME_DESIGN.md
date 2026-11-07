@@ -48,7 +48,7 @@ Start = bottom-left-ish corner cell; goal = farthest cell from start by BFS (gua
 
 ## Stars & par
 `par = shortestPathLength · 0.55 s` (path length in cells). `effective = time + 2·falls`.
-3★ ≤ par · 1.0 · 1.35, 2★ ≤ par · 2.2, else 1★. (Tuned in M3 against autopilot, see DEVLOG.)
+3★ ≤ par · 1.6, 2★ ≤ par · 2.6, else 1★. (Autopilot clears at ≈0.45 s/cell ≈ 0.8× par; humans expected ≈1.0–1.5×. Re-tune after playtests.)
 
 ## Economy
 | Item | Value |
