@@ -7,7 +7,7 @@ Legend: ✅ done · 🟡 in progress · ⬜ planned · 🚫 explicitly not build
 |---|-----------|---------------|--------|
 | M0 | Plan & docs | PRD, design, tech design, ADRs, roadmap committed | ✅ |
 | M1 | Core engine (headless) | rng, maze, levels, physics, autopilot + unit tests green (300 seeds solvable) | ✅ |
-| M2 | Playable prototype | three.js board + marble, keyboard/touch/gyro, win/fall in browser | ⬜ |
+| M2 | Playable prototype | three.js board + marble, keyboard/touch/gyro, win/fall in browser | ✅ |
 | M3 | Full game loop | menu, HUD, levels, daily, stars, coins, hints, skips, save | ⬜ |
 | M4 | Feel & platform | audio, haptics, juice, PWA/offline, settings, a11y | ⬜ |
 | M5 | Quality & release | e2e on mobile viewports, perf pass, docs, launch checklist | ⬜ |
