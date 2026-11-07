@@ -74,3 +74,9 @@ A daily-playing free player earns roughly 20–30 coins/day → ≈ 1–2 hints/
 | Fall | medium | whoosh, marble shrink-spin, 25 ms vibrate |
 | Win | large | arpeggio, confetti, marble sinks, stars stagger in |
 Reduced-motion: no shake, no confetti, instant transitions.
+
+## As-built tuning notes
+* Autopilot (vmax 3.2 u/s) clears levels at ≈0.45 s/cell; par = 0.55 s/cell. Star thresholds are par×1.6 / ×2.6 — **to be re-tuned from real human play**.
+* Replays pay coin pickups but not the clear reward (anti-farming). Daily pays once per day.
+* Hint trail shows the BFS-safe path from the marble's *current* cell for 4 s.
+* Attract mode (menu background) uses the same autopilot at a calm 2.4 u/s.

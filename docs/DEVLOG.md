@@ -1,6 +1,19 @@
 # Dev Log
 Newest first. One entry per working session / milestone: what changed, what was learned, what's next.
 
+## 2026-11-07 — M3 + M4: full game, platform & quality
+- Built the complete loop: menu with live attract-mode board, HUD, pause, level select, win screen (animated stars, share), settings, daily challenge + streak, hints, skips, coin economy, versioned save with backup/migration, ad policy with provider adapter, WebAudio synth (no assets), haptics, wake-lock, PWA (manifest, icons, offline SW), adaptive quality, reduced-motion.
+- Wrote a Playwright e2e suite (23 tests) against the **production** build. It earned its keep — found 4 real bugs that unit tests could never see:
+  1. an over-specific CSS rule made invisible HUD layers swallow touches (drag-to-roll was dead);
+  2. a layer/component class-name collision dimmed the HUD;
+  3. win-card content overflowed (grid track sizing);
+  4. buttons overflowed at 320 px (found only after strengthening the test to check *children*, not just the card).
+  Lesson: assert on the thing users see (children inside bounds), and always *look* at screenshots.
+- Added `TILT_ADS=off` (ADR-008) after realising a fake "DEMO AD" shouldn't ship to real players.
+- Measured: 145 KB gz, 24 draw calls, physics 1.8 µs/step, level gen 0.4 ms, no GPU leak across 60 loads.
+- Honest status: **everything automatable is green; nothing has run on a real phone.** The gyro mapping is verified against synthetic events and the design math only. Device matrix is in TEST_PLAN §4.
+- Next: real-device pass → retune tilt sensitivity, par/stars, quality threshold; then pick an ad provider & hosting.
+
 ## 2026-11-07 — M2: playable prototype
 - Added esbuild pipeline (`npm run build` → `dist/`, hashed assets, generated service worker), static server, three.js renderer (instanced floors/walls, holes, goal glow, coins, confetti, hint trail, trauma camera shake), input layer (gyro with iOS permission + calibration, touch stick, keyboard) and `Run` (fixed-step loop binding sim ↔ view ↔ input).
 - Verified in headless Chromium at iPhone-13 viewport: renders correctly; autopilot completes level 12 **in the browser** (11.8 s, 0 falls); gyro mapping matches the design math (+11° → 0.43, clamp, deadzone); **24 draw calls / 3.1k tris**; 61 fps on a *CPU* rasterizer at low quality.

@@ -127,6 +127,15 @@ sink can be added without touching gameplay code. Events: `level_start`, `level_
 | Cold start → interactive | < 2 s on 4G |
 | Memory | < 150 MB |
 
+## 10b. As-built notes (deviations from the original plan)
+* `game/` also contains `run.js` (one level session), `app.js` (state machine/economy/ads glue), `palettes.js` (6 world themes), `perf.js` (quality governor); `ui/icons.js` holds inline SVG icons.
+* UI layers are namespaced `.L-<name>` (a class collision with inner components once dimmed the screen).
+* Win coins are paid **at clear**, not on pickup (abandoning a level forfeits pickups). Replays pay pickups only — no farming level 1.
+* Timer starts on the first deliberate tilt, not at level load, so players can orient first.
+* Ads: `TILT_ADS=off|demo` build switch (ADR-008). Quality: adaptive governor (ADR-009).
+* Service worker: cache-first precache of every built file, versioned by content hash; `skipWaiting` + `clients.claim`.
+* Debug hooks (`?debug`, `?auto`, `?level=N`, `?q=`, `?ads=`) are always compiled in; they expose no data beyond what the player already has.
+
 ## 11. Security & privacy
 No network calls, no third-party scripts, no cookies, no PII. CSP in `index.html`: `default-src 'self'`
 (+ `'unsafe-inline'` style only if needed). Ad provider, when real, is the only planned third-party and

@@ -35,3 +35,18 @@ A level must be completable with every control scheme (physics identical; only t
 **Context.** The skill catalog documents r186; the installable version in this environment is 0.170.
 **Decision.** Use only stable core APIs (WebGLRenderer, InstancedMesh, MeshStandardMaterial, shadows) that are identical across both.
 **Consequences.** Upgrade is a version bump; no use of `Timer`/WebGPU features.
+
+## ADR-008 — Ads mode is a build-time switch; `off` is the soft-launch default (2026-11-07)
+**Context.** Until a real ad SDK is integrated (ADR-005), a visible "DEMO AD" would be odd for real players.
+**Decision.** `TILT_ADS=off npm run build` bakes `__ADS_MODE__='off'` (a `NullProvider`); `?ads=off|demo` overrides at runtime for testing.
+With ads off the UI degrades honestly: no "watch ad" buttons, and 0-coin hint/skip show a short explanation instead.
+**Consequences.** + A clean, honest soft launch; economy still works (coins earned by play). − No ad revenue (expected until a provider exists).
+
+## ADR-009 — Adaptive graphics quality (2026-11-07)
+**Decision.** `QualityGovernor` samples frame times after a 30-frame warm-up; if the 90-frame average exceeds 30 ms on High it switches to Low once,
+persists the choice and informs the player. Skipped when quality is pinned via URL or already Low.
+**Consequences.** + Protects low-end phones (the target market) without a settings visit. − One visible quality change on slow devices; thresholds need real-device tuning.
+
+## ADR-010 — Physics is fixed-step and time-based; frame dt is clamped (2026-11-07)
+**Decision.** Simulation runs at 120 Hz with ≤ 6 substeps per frame and `dt ≤ 50 ms`; overload yields slow-motion, never tunnelling.
+**Consequences.** + Determinism & safety; − on very slow devices game time runs slower than wall time (the governor mitigates).

@@ -30,6 +30,12 @@ export function dailyKey(date = new Date()) {
   return `${date.getFullYear()}-${p(date.getMonth() + 1)}-${p(date.getDate())}`;
 }
 
+/** Previous calendar day key for a YYYY-MM-DD key (local calendar arithmetic, DST-safe via noon). */
+export function prevDayKey(key) {
+  const [y, m, d] = key.split('-').map(Number);
+  return dailyKey(new Date(y, m - 1, d - 1, 12));
+}
+
 export function dailyParams(key = dailyKey()) {
   return {
     seed: `tilt:daily:${key}`,
