@@ -53,6 +53,9 @@ public/    html, manifest, service worker template, icons
 docs/      PRD, game design, tech design, ADRs, roadmap, test plan, launch checklist, dev log
 ```
 
+## Reusable skill
+`skills/browser-game-playbook/` (also packaged as `skills/browser-game-playbook.skill`) captures this build as a Claude skill: a runnable starter (`scripts/new-game.sh`), a pitfall catalog and testing/calibration/deploy recipes.
+
 ## Docs
 [PRD](docs/PRD.md) · [Game design & tuning](docs/GAME_DESIGN.md) · [Tech design](docs/TECH_DESIGN.md) ·
 [Decisions (ADRs)](docs/DECISIONS.md) · [Roadmap & status](docs/ROADMAP.md) · [Test plan](docs/TEST_PLAN.md) ·
