@@ -1,14 +1,17 @@
 name: CI
 on:
   push:
+    paths: ['tilt/**', '.github/workflows/ci.yml']
   pull_request:
+    paths: ['tilt/**', '.github/workflows/ci.yml']
 jobs:
   test-and-build:
+    defaults: { run: { working-directory: tilt } }
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
-        with: { node-version: 22, cache: npm }
+        with: { node-version: 22, cache: npm, cache-dependency-path: tilt/package-lock.json }
       - run: npm ci
       - run: npm test
       - run: npm run build
@@ -18,12 +21,13 @@ jobs:
           echo "gzip js bytes: $size"
           test "$size" -lt 409600
   e2e:
+    defaults: { run: { working-directory: tilt } }
     runs-on: ubuntu-latest
     needs: test-and-build
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
-        with: { node-version: 22, cache: npm }
+        with: { node-version: 22, cache: npm, cache-dependency-path: tilt/package-lock.json }
       - run: npm ci
       - run: npm install --no-save playwright@1.63.0
       - run: npx playwright install --with-deps chromium

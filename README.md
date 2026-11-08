@@ -1,68 +1,19 @@
-# Tilt — 3D marble maze for mobile & web
+# game-dev
 
-**Tilt your phone, roll the marble, reach the glow.** Infinite procedurally generated mazes, a Daily
-Challenge with streaks, holes / ice / sticky floors, coins and hints — all in a ~145 KB (gzip) PWA that
-works offline. Built with three.js, a tiny custom physics solver and zero runtime dependencies beyond that.
+A monorepo for all the games we build. Each game lives in its own top-level folder with its own
+code, docs, tests and tooling; nothing is shared implicitly between games.
 
-| Menu | Play | Win |
+## Games
+| Folder | Game | Description |
 |---|---|---|
-| ![menu](docs/screenshots/01-menu.png) | ![play](docs/screenshots/04-hint.png) | ![win](docs/screenshots/03-win.png) |
+| [`tilt/`](tilt/) | **Tilt** | 3D marble maze for mobile & web (three.js PWA) |
 
-## Run it
-```bash
-npm install
-npm run dev          # builds (dev, sourcemaps) and serves dist/ on http://localhost:8080
-# or
-npm run build && npm run serve
-```
-Open it on a phone (same network, or any HTTPS static host — **device-motion requires HTTPS**, `localhost` also counts).
+## Shared
+* [`skills/`](skills/) — reusable Claude skills (e.g. the browser-game playbook) that apply across games.
+* `.github/workflows/` — CI/deploy, scoped per game via `working-directory` and path filters.
 
-## Controls
-| Device | Control |
-|---|---|
-| Phone / tablet | **Tilt** the device (motion sensor). iOS asks permission the first time you press Play. Press the ◎ button to recalibrate "flat". |
-| Any touchscreen | **Drag anywhere** — a virtual stick appears under your finger |
-| Desktop | Arrow keys / WASD, or drag with the mouse. `Esc`/`P` pause, `R` recalibrate |
-
-## Game rules in 30 seconds
-* Reach the glowing ring. Stars come from time vs. par; each fall adds 2 s.
-* **Holes** drop you back to the start. **Ice** (stripes) is slippery, **sticky** (dots) is slow.
-* 3 coins per level; clear rewards + pickups buy **hints** (15) and **skips** (40). Free players always progress.
-* **Daily Challenge**: same maze for everyone each day; keep your streak.
-* No banner ads. Rewarded video is optional; the shipped provider is a labelled **demo** (see ADR-005).
-
-## Scripts
-| Command | What |
-|---|---|
-| `npm test` | 31 unit tests (generation, physics, autopilot solvability, save, economy, ads, perf) |
-| `npm run build` | Production bundle → `dist/` (+ service worker, hashed assets) |
-| `npm run sim` | Difficulty calibration sims (human-like controllers, first-time explorer) — re-run after tuning |
-| `npm run e2e` | 24 browser tests against the production build (needs `playwright` + Chromium). `-- --shots` regenerates `docs/screenshots` |
-| `npm run icons` | Re-render PNG icons from `public/icons/icon.svg` |
-| `npm run check` | test + build |
-| `TILT_ADS=off npm run build` | Build with **no ads at all** (recommended until a real ad provider is integrated) |
-
-Debug URLs: `?level=N` jump to a level · `?auto` autopilot plays · `?q=low` force low graphics · `?debug` exposes `window.__tilt` and logs telemetry events.
-
-## Project map
-```
-src/core   pure logic (rng, maze, levels, physics, autopilot, scoring, economy, save) — no DOM, fully tested in Node
-src/game   renderer (three.js), input, run loop, audio synth, ads policy, perf governor, app shell
-src/ui     DOM overlays + CSS
-public/    html, manifest, service worker template, icons
-docs/      PRD, game design, tech design, ADRs, roadmap, test plan, launch checklist, dev log
-```
-
-## Reusable skill
-`skills/browser-game-playbook/` (also packaged as `skills/browser-game-playbook.skill`) captures this build as a Claude skill: a runnable starter (`scripts/new-game.sh`), a pitfall catalog and testing/calibration/deploy recipes.
-
-## Docs
-[PRD](docs/PRD.md) · [Game design & tuning](docs/GAME_DESIGN.md) · [Tech design](docs/TECH_DESIGN.md) ·
-[Decisions (ADRs)](docs/DECISIONS.md) · [Roadmap & status](docs/ROADMAP.md) · [Test plan](docs/TEST_PLAN.md) ·
-[Launch checklist](docs/LAUNCH_CHECKLIST.md) · [Dev log](docs/DEVLOG.md) · [Changelog](CHANGELOG.md)
-
-## Deploying
-**GitHub Pages (automated):** `.github/workflows/pages.yml` tests, builds with `TILT_ADS=off` and deploys `dist/` on every push to `main`/`master`. One-time setup: repo **Settings → Pages → Source: GitHub Actions**. Live URL: `https://<owner>.github.io/<repo>/`.
-
-**Anywhere else:** `dist/` is a static site with only relative URLs, so it works at a domain root or a sub-path. Any static host
-over HTTPS works (GitHub Pages, Netlify, Cloudflare Pages, S3+CDN). Serve `sw.js` with `Cache-Control: no-cache`.
+## Adding a new game
+1. Create a new folder at the repo root: `<game-name>/` (lowercase, kebab-case).
+2. Keep everything for that game inside it (`package.json`, `src/`, `docs/`, `tests/`, its own `README.md`).
+3. Add a row to the table above.
+4. Add CI for it: copy `.github/workflows/ci.yml`, set `working-directory`, `cache-dependency-path` and the `paths:` filter to the new folder.

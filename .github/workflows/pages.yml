@@ -12,11 +12,12 @@ concurrency:
   cancel-in-progress: true
 jobs:
   build:
+    defaults: { run: { working-directory: tilt } }
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
-        with: { node-version: 22, cache: npm }
+        with: { node-version: 22, cache: npm, cache-dependency-path: tilt/package-lock.json }
       - run: npm ci
       - run: npm test
       - name: Build (ads off until a real provider is integrated — ADR-008)
@@ -26,7 +27,7 @@ jobs:
       # Requires one-time repo setup: Settings -> Pages -> Source: GitHub Actions (the workflow token cannot enable Pages itself).
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
-        with: { path: dist }
+        with: { path: tilt/dist }
   deploy:
     needs: build
     runs-on: ubuntu-latest
